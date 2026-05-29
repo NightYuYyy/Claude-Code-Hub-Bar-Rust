@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="liquidGlass">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CCHBar 设置</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="panel.css" />
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <div class="settings-body">
+      <div class="settings-title">设置</div>
+      <div class="settings-subtitle">Claude Code Hub Bar · 跨平台版</div>
+
+      <div class="settings-card">
+        <h3>连接</h3>
+        <div class="field">
+          <label for="set-url">CCH 地址</label>
+          <input type="text" id="set-url" placeholder="http://localhost:3000" />
+        </div>
+        <div class="field">
+          <label for="set-token">API Key</label>
+          <input type="text" id="set-token" placeholder="留空则从 .env 读取" />
+        </div>
+        <div class="field">
+          <label for="set-env">.env 路径（可选）</label>
+          <input type="text" id="set-env" placeholder="~/.cch/.env" />
+          <div class="hint">未填写 API Key 时，从该文件读取 CCH_API_KEY / TOKEN。</div>
+        </div>
+        <div class="actions">
+          <button class="btn-secondary" id="btn-probe">测试连接</button>
+        </div>
+        <div class="probe-result hidden" id="probe-result"></div>
+      </div>
+
+      <div class="settings-card">
+        <h3>刷新</h3>
+        <div class="field">
+          <label for="set-interval">刷新间隔（秒）：<span id="interval-value">15</span></label>
+          <input type="range" id="set-interval" min="5" max="120" step="5" value="15" style="width:100%" />
+        </div>
+        <div class="field-row">
+          <div>
+            <div class="field-label">菜单栏显示详情</div>
+            <div class="field-desc">在托盘标题展示花费/运行状态</div>
+          </div>
+          <span class="toggle on" id="set-details"></span>
+        </div>
+        <div class="field-row">
+          <div>
+            <div class="field-label">检查更新</div>
+            <div class="field-desc">启动时检查 GitHub 新版本</div>
+          </div>
+          <span class="toggle on" id="set-updates"></span>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>外观</h3>
+        <div class="theme-options">
+          <div class="theme-opt" data-theme-value="liquidGlass">
+            <div class="theme-swatch swatch-glass"></div>
+            Liquid Glass
+          </div>
+          <div class="theme-opt" data-theme-value="endlessDark">
+            <div class="theme-swatch swatch-dark"></div>
+            Endless Dark
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <span class="spacer"></span>
+        <button class="btn-secondary" id="btn-cancel">关闭</button>
+        <button class="btn-primary" id="btn-save">保存</button>
+      </div>
+    </div>
+
+    <script src="settings.js"></script>
+  </body>
+</html>

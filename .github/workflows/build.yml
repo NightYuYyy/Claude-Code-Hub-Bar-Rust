@@ -1,0 +1,116 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test-core:
+    name: test cch-core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo test (core)
+        run: cargo test -p cch-core --verbose
+      - name: cargo clippy (core)
+        run: cargo clippy -p cch-core --all-targets -- -D warnings
+
+  build:
+    name: bundle (${{ matrix.label }})
+    needs: test-core
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: macos-arm64
+            os: macos-14
+            rust-target: aarch64-apple-darwin
+            args: "--target aarch64-apple-darwin --bundles app,dmg"
+          - label: macos-x64
+            os: macos-13
+            rust-target: x86_64-apple-darwin
+            args: "--target x86_64-apple-darwin --bundles app,dmg"
+          - label: windows-x64
+            os: windows-latest
+            rust-target: x86_64-pc-windows-msvc
+            args: "--bundles nsis"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ". -> target"
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+
+      - name: Build (tauri)
+        run: cargo tauri build ${{ matrix.args }}
+
+      - name: Collect macOS artifacts
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          mkdir -p dist
+          BASE="target/${{ matrix.rust-target }}/release/bundle"
+          find "$BASE/dmg" -name "*.dmg" -exec cp {} dist/ \; 2>/dev/null || true
+          if [ -d "$BASE/macos" ]; then
+            for app in "$BASE/macos"/*.app; do
+              [ -e "$app" ] || continue
+              name="$(basename "$app" .app)"
+              ditto -c -k --sequesterRsrc --keepParent "$app" "dist/${name}-${{ matrix.label }}.app.zip"
+            done
+          fi
+          ls -la dist
+
+      - name: Collect Windows artifacts
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          $base = "target/release/bundle"
+          Get-ChildItem -Path "$base/nsis" -Filter *.exe -ErrorAction SilentlyContinue | Copy-Item -Destination dist
+          Get-ChildItem -Path "$base/msi" -Filter *.msi -ErrorAction SilentlyContinue | Copy-Item -Destination dist
+          if (Test-Path "target/release/cch-bar.exe") {
+            Copy-Item "target/release/cch-bar.exe" "dist/CCHBar-portable-x64.exe"
+          }
+          Get-ChildItem dist
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cchbar-${{ matrix.label }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: attach to release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

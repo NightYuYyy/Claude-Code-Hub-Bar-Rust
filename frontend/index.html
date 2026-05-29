@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="liquidGlass">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code Hub Bar</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <div class="panel">
+      <header class="panel-header">
+        <div class="brand">
+          <div class="logo">C</div>
+          <div>
+            <div class="title">Claude Code Hub</div>
+            <div class="subtitle" id="conn-subtitle">connecting…</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn spin-host" id="btn-refresh" title="立即刷新">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-settings" title="设置">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="error-banner hidden" id="error-banner"></div>
+
+      <nav class="tabs">
+        <div class="tab active" data-tab="dashboard">概览</div>
+        <div class="tab" data-tab="leaderboard">排行</div>
+        <div class="tab" data-tab="logs">日志</div>
+        <div class="tab" data-tab="providers">供应商</div>
+      </nav>
+
+      <div class="content">
+        <section class="tab-panel active" id="tab-dashboard"></section>
+        <section class="tab-panel" id="tab-leaderboard"></section>
+        <section class="tab-panel" id="tab-logs"></section>
+        <section class="tab-panel" id="tab-providers"></section>
+      </div>
+
+      <footer class="panel-footer">
+        <span id="footer-status">就绪</span>
+        <span class="spacer"></span>
+        <button id="btn-update" class="hidden">有新版本</button>
+        <span class="mono" id="footer-version">v1.1.12</span>
+      </footer>
+    </div>
+
+    <script src="format.js"></script>
+    <script src="render.js"></script>
+    <script src="panel.js"></script>
+  </body>
+</html>

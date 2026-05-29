@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CCHBar",
+  "version": "1.1.12",
+  "identifier": "com.cchbar.rust",
+  "build": {
+    "frontendDist": "../frontend"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "panel",
+        "title": "Claude Code Hub Bar",
+        "width": 420,
+        "height": 640,
+        "minWidth": 380,
+        "minHeight": 480,
+        "resizable": true,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "visible": false,
+        "url": "index.html"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: data:; style-src 'self' 'unsafe-inline'; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg", "nsis", "msi"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "Claude Code Hub menu bar / tray monitor",
+    "longDescription": "Cross-platform tray monitor for Claude Code Hub: live overview, leaderboard, request logs, and provider health.",
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  }
+}
