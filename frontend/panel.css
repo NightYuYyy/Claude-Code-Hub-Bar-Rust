@@ -13,6 +13,17 @@
   box-shadow: var(--shadow);
 }
 
+/* Windows / Linux: the panel fills a normal application window that already
+   has a system title bar, so drop the floating-popover chrome. */
+:root[data-window-mode="window"] .panel {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+:root[data-window-mode="window"] .panel-header {
+  -webkit-app-region: no-drag;
+}
+
 .panel-header {
   display: flex;
   align-items: center;

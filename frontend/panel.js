@@ -179,6 +179,13 @@ setInterval(() => {
 }, 1000);
 
 async function boot() {
+  // Panel window mode (popover on macOS, normal window on Windows/Linux).
+  try {
+    const mode = await invoke("get_panel_mode");
+    document.documentElement.dataset.windowMode = mode;
+  } catch (e) {
+    document.documentElement.dataset.windowMode = "window";
+  }
   // Theme + version from settings.
   try {
     const settings = await invoke("get_settings");

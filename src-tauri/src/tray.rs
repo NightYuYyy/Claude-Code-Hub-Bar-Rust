@@ -18,7 +18,7 @@ use cch_core::state::StatusBarPayload;
 pub const TRAY_ID: &str = "cch-bar-tray";
 
 pub fn build_tray(app: &AppHandle, state: Arc<AppState>) -> tauri::Result<()> {
-    let open_item = MenuItem::with_id(app, "open", "打开面板", true, None::<&str>)?;
+    let open_item = MenuItem::with_id(app, "open", "显示窗口", true, None::<&str>)?;
     let settings_item = MenuItem::with_id(app, "settings", "设置…", true, None::<&str>)?;
     let refresh_item = MenuItem::with_id(app, "refresh", "立即刷新", true, None::<&str>)?;
     let sep = PredefinedMenuItem::separator(app)?;
@@ -48,7 +48,7 @@ pub fn build_tray(app: &AppHandle, state: Arc<AppState>) -> tauri::Result<()> {
             let state = menu_state.clone();
             match event.id.as_ref() {
                 "open" => {
-                    let _ = crate::windows::toggle_panel_window(&app);
+                    let _ = crate::windows::show_panel_window(&app);
                 }
                 "settings" => {
                     let _ = crate::windows::show_settings_window(&app);

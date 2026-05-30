@@ -16,6 +16,18 @@ pub async fn get_view_model(state: State<'_, Arc<AppState>>) -> Cmd<ViewModel> {
     Ok(state.monitor.lock().await.view_model())
 }
 
+/// Returns the panel window mode for the host platform: `"popover"` on macOS
+/// (borderless menu-bar popover) or `"window"` on Windows/Linux (normal
+/// always-visible window). The frontend uses this to adjust its chrome.
+#[tauri::command]
+pub fn get_panel_mode() -> &'static str {
+    if crate::windows::PANEL_IS_POPOVER {
+        "popover"
+    } else {
+        "window"
+    }
+}
+
 #[tauri::command]
 pub async fn get_settings(state: State<'_, Arc<AppState>>) -> Cmd<Settings> {
     Ok(state.settings.lock().await.clone())
@@ -189,13 +201,10 @@ pub async fn open_settings_window(app: tauri::AppHandle) -> Cmd<()> {
     crate::windows::show_settings_window(&app).map_err(|e| e.to_string())
 }
 
-/// Close the popover panel window.
+/// Hide the panel window to the tray.
 #[tauri::command]
 pub async fn close_panel(app: tauri::AppHandle) -> Cmd<()> {
-    if let Some(window) = tauri::Manager::get_webview_window(&app, "panel") {
-        let _ = window.hide();
-    }
-    Ok(())
+    crate::windows::hide_panel_window(&app).map_err(|e| e.to_string())
 }
 
 /// Return the menu-bar running logs only (used for quick polling if desired).

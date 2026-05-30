@@ -59,6 +59,7 @@ pub fn run() {
         .manage(state.clone())
         .invoke_handler(tauri::generate_handler![
             commands::get_view_model,
+            commands::get_panel_mode,
             commands::get_settings,
             commands::save_settings,
             commands::refresh_now,
@@ -80,6 +81,11 @@ pub fn run() {
 
             tray::build_tray(&handle, app_state.clone())?;
 
+            // Create the panel window with platform-appropriate behavior:
+            // a hidden menu-bar popover on macOS, a visible main window on
+            // Windows/Linux.
+            windows::ensure_panel(&handle)?;
+
             // On macOS, hide the dock icon — this is a menu-bar app.
             #[cfg(target_os = "macos")]
             {
@@ -90,18 +96,22 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            // Hide (don't destroy) the panel when it loses focus or is closed,
-            // mimicking a popover.
-            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                if window.label() == "panel" {
+            if window.label() != "panel" {
+                return;
+            }
+            match event {
+                // Closing the panel never quits the app — it tucks into the
+                // tray. Quit is only available from the tray menu.
+                tauri::WindowEvent::CloseRequested { api, .. } => {
                     api.prevent_close();
                     let _ = window.hide();
                 }
-            }
-            if let tauri::WindowEvent::Focused(false) = event {
-                if window.label() == "panel" {
+                // On macOS the popover hides as soon as it loses focus. On
+                // Windows/Linux the panel is a normal window that stays open.
+                tauri::WindowEvent::Focused(false) if windows::PANEL_IS_POPOVER => {
                     let _ = window.hide();
                 }
+                _ => {}
             }
         })
         .build(tauri::generate_context!())
