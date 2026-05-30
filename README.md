@@ -1,6 +1,6 @@
 # Claude Code Hub Bar (Rust)
 
-跨平台的 **Claude Code Hub** 菜单栏 / 托盘监控工具。本项目是原 macOS 专属 SwiftUI 应用的 **Rust 移植版**，使用 [Tauri v2](https://tauri.app) 实现，可在 **Windows 与 macOS** 上原生运行。
+跨平台的 **Claude Code Hub** 菜单栏 / 托盘监控工具。本项目是 [Claude Code Hub Bar](https://github.com/xt1990xt1990/Claude-Code-Hub-Bar) 的 **Rust 移植版**，使用 [Tauri v2](https://tauri.app) 实现，可在 **Windows 与 macOS** 上原生运行。
 
 > A cross-platform tray monitor for Claude Code Hub. All business logic is a faithful Rust port of the original macOS SwiftUI app; the UI is reproduced 1:1 in a Tauri webview.
 
@@ -65,3 +65,11 @@ GitHub Actions（`.github/workflows/build.yml`）在每次 push / tag 时自动�
 ## License
 
 MIT
+
+本项目部分内容基于 `xt1990xt1990` 的 [Claude Code Hub Bar](https://github.com/xt1990xt1990/Claude-Code-Hub-Bar)。
+如果再分发涉及原项目的实质内容，请保留原始版权声明、MIT 许可证文本和 [NOTICE](./NOTICE) 中的署名信息。
+
+Portions of this project are based on [Claude Code Hub Bar](https://github.com/xt1990xt1990/Claude-Code-Hub-Bar) by `xt1990xt1990`.
+Please retain the original copyright notice, MIT License text, and attribution
+information in [NOTICE](./NOTICE) when redistributing substantial portions of
+the original project.

@@ -1,0 +1,23 @@
+Claude Code Hub Bar Rust
+
+Copyright (c) 2026 NightYuYyy
+Portions copyright (c) 2026 xt1990xt1990
+
+This project is a Rust/Tauri port of Claude Code Hub Bar:
+
+https://github.com/xt1990xt1990/Claude-Code-Hub-Bar
+
+本项目是 Claude Code Hub Bar 的 Rust/Tauri 移植版。原项目基于 MIT License
+开源；如果再分发内容中包含原项目的实质部分，请保留原项目版权声明、MIT
+许可证文本和署名信息。
+
+The original Claude Code Hub Bar project is released under the MIT License.
+Copies, forks, modified versions, and redistributed builds that use a
+substantial portion of the original project should retain the original
+copyright notice, MIT License text, and attribution information.
+
+Acknowledgements:
+
+- Claude Code Hub Bar by xt1990xt1990: https://github.com/xt1990xt1990/Claude-Code-Hub-Bar
+- Claude Code Hub: https://github.com/ding113/claude-code-hub
+- LobeHub Icons: https://github.com/lobehub/lobe-icons
